@@ -1,0 +1,17 @@
+const express = require('express');
+const router = require('./routes');
+
+const app = express();
+
+app.use(express.static('public'));
+app.use(express.json());
+app.use('/api', router);
+
+app.use((err, req, res, next)=> {
+    const statusError = err.status || 500;
+    res.status(statusError).send({
+        errors: [{message: err.message || 'Internal Server Error'}]
+    })
+})
+
+module.exports = app;
